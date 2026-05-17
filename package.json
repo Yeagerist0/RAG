@@ -1,0 +1,46 @@
+{
+  "name": "notebooklm-rag",
+  "version": "1.0.0",
+  "description": "Production-ready RAG application with Corrective RAG pattern - Chat with your documents using AI",
+  "main": "backend/dist/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"npm run backend:dev\" \"npm run frontend:dev\"",
+    "build": "npm run backend:build && npm run frontend:build",
+    "backend:dev": "cd backend && npm run dev",
+    "backend:build": "cd backend && npm run build",
+    "frontend:dev": "cd frontend && npm run dev",
+    "frontend:build": "cd frontend && npm run build",
+    "start": "cd backend && npm start",
+    "lint": "cd backend && npm run lint && cd ../frontend && npm run lint",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "test": "echo 'Run tests in backend and frontend directories'"
+  },
+  "keywords": [
+    "rag",
+    "retrieval-augmented-generation",
+    "nlp",
+    "vector-database",
+    "openai",
+    "qdrant",
+    "notebooklm",
+    "document-chat",
+    "corrective-rag"
+  ],
+  "author": "AI Developer",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Yeagerist0/RAG.git"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "workspaces": [
+    "backend",
+    "frontend"
+  ]
+}

@@ -7,9 +7,23 @@ import pino from "pino";
 const logger = pino();
 
 export class FileParser {
+  private readonly uploadRoot = path.resolve("/tmp");
+
+  private getSafePath(filePath: string): string {
+    const resolvedPath = path.resolve(filePath);
+    const isWithinUploadRoot = resolvedPath === this.uploadRoot || resolvedPath.startsWith(`${this.uploadRoot}${path.sep}`);
+
+    if (!isWithinUploadRoot) {
+      throw new Error("Invalid file path");
+    }
+
+    return resolvedPath;
+  }
+
   async parsePDF(filePath: string): Promise<string> {
     try {
-      const dataBuffer = await fs.readFile(filePath);
+      const safePath = this.getSafePath(filePath);
+      const dataBuffer = await fs.readFile(safePath);
       const data = await pdf(dataBuffer);
       return data.text;
     } catch (error) {
@@ -20,7 +34,8 @@ export class FileParser {
 
   async parseTXT(filePath: string): Promise<string> {
     try {
-      const content = await fs.readFile(filePath, "utf-8");
+      const safePath = this.getSafePath(filePath);
+      const content = await fs.readFile(safePath, "utf-8");
       return content;
     } catch (error) {
       logger.error(`Error parsing TXT: ${error}`);
@@ -29,13 +44,14 @@ export class FileParser {
   }
 
   async parseFile(filePath: string): Promise<Document> {
-    const ext = path.extname(filePath).toLowerCase();
+    const safePath = this.getSafePath(filePath);
+    const ext = path.extname(safePath).toLowerCase();
     let content = "";
 
     if (ext === ".pdf") {
-      content = await this.parsePDF(filePath);
+      content = await this.parsePDF(safePath);
     } else if (ext === ".txt") {
-      content = await this.parseTXT(filePath);
+      content = await this.parseTXT(safePath);
     } else {
       throw new Error(`Unsupported file format: ${ext}`);
     }
@@ -44,11 +60,11 @@ export class FileParser {
       id: `doc-${Date.now()}`,
       content,
       metadata: {
-        fileName: path.basename(filePath),
-        fileSize: (await fs.stat(filePath)).size,
+        fileName: path.basename(safePath),
+        fileSize: (await fs.stat(safePath)).size,
         uploadedAt: new Date().toISOString(),
       },
-      source: path.basename(filePath),
+      source: path.basename(safePath),
     };
   }
 }

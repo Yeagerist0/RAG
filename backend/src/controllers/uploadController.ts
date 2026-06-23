@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import { UploadedFile, FileArray } from "express-fileupload";
+import { randomUUID } from "crypto";
+import path from "path";
 import { FileParser } from "../utils/fileParser.js";
 import { ChunkingService } from "../services/chunking/index.js";
 import { EmbeddingService } from "../services/embedding/embeddingService.js";
@@ -32,7 +34,12 @@ export class UploadController {
       }
 
       const file = files.file as UploadedFile;
-      const tempPath = `/tmp/${Date.now()}-${file.name}`;
+      const extension = path.extname(file.name).toLowerCase();
+      if (![".pdf", ".txt"].includes(extension)) {
+        res.status(400).json({ error: "Unsupported file format. Only PDF and TXT are allowed." });
+        return;
+      }
+      const tempPath = path.join("/tmp", `${Date.now()}-${randomUUID()}${extension}`);
 
       // Save file temporarily
       await file.mv(tempPath);

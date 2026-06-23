@@ -1,6 +1,6 @@
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { Chunk, EmbeddingResult } from "../../types/index.js";
-import { QdrantClient } from "@qdrant/js-client";
+import { QdrantClient } from "@qdrant/js-client-rest";
 import pino from "pino";
 
 const logger = pino();

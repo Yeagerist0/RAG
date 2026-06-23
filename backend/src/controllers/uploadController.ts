@@ -41,7 +41,7 @@ export class UploadController {
         res.status(400).json({ error: "Unsupported file format. Only PDF and TXT are allowed." });
         return;
       }
-      const tempPath = path.join(TEMP_UPLOAD_DIR, `${Date.now()}-${randomUUID()}${extension}`);
+      const tempPath = path.join(TEMP_UPLOAD_DIR, `${randomUUID()}${extension}`);
 
       // Save file temporarily
       await file.mv(tempPath);

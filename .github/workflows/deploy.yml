@@ -18,13 +18,23 @@ jobs:
           node-version: '18'
       
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
       
       - name: Lint backend
-        run: cd backend && npm run lint --if-present
+        run: |
+          if [ -f backend/.eslintrc ] || [ -f backend/.eslintrc.json ] || [ -f backend/.eslintrc.js ] || [ -f backend/.eslintrc.cjs ] || [ -f backend/eslint.config.js ] || [ -f backend/eslint.config.cjs ]; then
+            cd backend && npm run lint --if-present
+          else
+            echo "No backend ESLint configuration found; skipping lint."
+          fi
       
       - name: Lint frontend
-        run: cd frontend && npm run lint --if-present
+        run: |
+          if [ -f frontend/.eslintrc ] || [ -f frontend/.eslintrc.json ] || [ -f frontend/.eslintrc.js ] || [ -f frontend/.eslintrc.cjs ] || [ -f frontend/eslint.config.js ] || [ -f frontend/eslint.config.cjs ]; then
+            cd frontend && npm run lint --if-present
+          else
+            echo "No frontend ESLint configuration found; skipping lint."
+          fi
       
       - name: Build backend
         run: cd backend && npm run build

@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { UploadedFile, FileArray } from "express-fileupload";
 import { FileParser } from "../utils/fileParser.js";
 import { ChunkingService } from "../services/chunking/index.js";
 import { EmbeddingService } from "../services/embedding/embeddingService.js";
@@ -23,12 +24,14 @@ export class UploadController {
 
   async uploadDocument(req: Request, res: Response): Promise<void> {
     try {
-      if (!req.files || !req.files.file) {
+      const files = req.files as FileArray | undefined;
+
+      if (!files || !files.file) {
         res.status(400).json({ error: "No file provided" });
         return;
       }
 
-      const file = req.files.file as any;
+      const file = files.file as UploadedFile;
       const tempPath = `/tmp/${Date.now()}-${file.name}`;
 
       // Save file temporarily

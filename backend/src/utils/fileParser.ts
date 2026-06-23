@@ -1,5 +1,6 @@
 import { Document } from "../types/index.js";
 import * as fs from "fs/promises";
+import os from "os";
 import * as path from "path";
 import pdf from "pdf-parse";
 import pino from "pino";
@@ -7,7 +8,7 @@ import pino from "pino";
 const logger = pino();
 
 export class FileParser {
-  private readonly uploadRoot = path.resolve("/tmp");
+  private readonly uploadRoot = path.resolve(process.env.UPLOAD_DIR || os.tmpdir());
 
   private getSafePath(filePath: string): string {
     const resolvedPath = path.resolve(filePath);

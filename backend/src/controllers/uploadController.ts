@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { UploadedFile, FileArray } from "express-fileupload";
 import { randomUUID } from "crypto";
+import os from "os";
 import path from "path";
 import { FileParser } from "../utils/fileParser.js";
 import { ChunkingService } from "../services/chunking/index.js";
@@ -8,7 +9,7 @@ import { EmbeddingService } from "../services/embedding/embeddingService.js";
 import pino from "pino";
 
 const logger = pino();
-const TEMP_UPLOAD_DIR = "/tmp";
+const TEMP_UPLOAD_DIR = process.env.UPLOAD_DIR || os.tmpdir();
 
 export class UploadController {
   private fileParser: FileParser;

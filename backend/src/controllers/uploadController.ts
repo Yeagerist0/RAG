@@ -8,6 +8,7 @@ import { EmbeddingService } from "../services/embedding/embeddingService.js";
 import pino from "pino";
 
 const logger = pino();
+const TEMP_UPLOAD_DIR = "/tmp";
 
 export class UploadController {
   private fileParser: FileParser;
@@ -39,7 +40,7 @@ export class UploadController {
         res.status(400).json({ error: "Unsupported file format. Only PDF and TXT are allowed." });
         return;
       }
-      const tempPath = path.join("/tmp", `${Date.now()}-${randomUUID()}${extension}`);
+      const tempPath = path.join(TEMP_UPLOAD_DIR, `${Date.now()}-${randomUUID()}${extension}`);
 
       // Save file temporarily
       await file.mv(tempPath);

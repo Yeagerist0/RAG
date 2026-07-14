@@ -45,7 +45,7 @@ ${context}`;
 
     try {
       const response = await this.openaiClient.chat.completions.create({
-        model: "gpt-4-mini",
+        model: "gpt-4o-mini",
         messages: [
           {
             role: "system",

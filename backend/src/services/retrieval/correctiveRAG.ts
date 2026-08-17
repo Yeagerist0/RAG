@@ -69,7 +69,7 @@ export class CorrectiveRAG {
     for (const doc of docs) {
       try {
         const response = await this.openaiClient.chat.completions.create({
-          model: "gpt-4-mini",
+          model: "gpt-4o-mini",
           messages: [
             {
               role: "system",
@@ -100,7 +100,7 @@ export class CorrectiveRAG {
   private async rewriteQuery(query: string): Promise<string> {
     try {
       const response = await this.openaiClient.chat.completions.create({
-        model: "gpt-4-mini",
+        model: "gpt-4o-mini",
         messages: [
           {
             role: "system",
